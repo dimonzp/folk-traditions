@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import {
-  Search, Menu, X, ChevronRight, MapPin,
+  Menu, X, MapPin,
   Music, Scissors, Utensils,
   Flame, Shirt, Wind, Mic, ArrowRight,
   Archive, FileText, LayoutGrid, Building2
@@ -12,6 +12,7 @@ const folkBg = `url("data:image/svg+xml;charset=utf8,${encodeURIComponent(svgRaw
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 const NAV_LINKS = ["Archive", "Regions", "Categories", "About"];
+const RESEARCHER_EMAIL = "research@folkarchive.org";
 
 const CATEGORY_TABS = [
   { id: "all",            label: "All",           icon: LayoutGrid },
@@ -382,11 +383,38 @@ export default function App() {
   const [categoryModal,  setCategoryModal]  = useState<string | null>(null);
   const [regionModal,    setRegionModal]    = useState<string | null>(null);
   const [archiveItemModal, setArchiveItemModal] = useState<Item | null>(null);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+  const [contactForm, setContactForm] = useState({
+    phone: "",
+    email: "",
+    message: "",
+  });
 
   const filtered =
     activeCategory === "all"
       ? ITEMS
       : ITEMS.filter((i) => i.categories.includes(activeCategory));
+
+  const handleContactSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const subject = "Researcher contact request";
+    const body = [
+      "Hello,",
+      "",
+      "I would like to contact a researcher about the Digital Folk Archive.",
+      "",
+      `Phone: ${contactForm.phone || "Not provided"}`,
+      `Email: ${contactForm.email || "Not provided"}`,
+      "",
+      "Additional information:",
+      contactForm.message || "Not provided",
+    ].join("\n");
+
+    window.location.href = `mailto:${RESEARCHER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setContactModalOpen(false);
+    setContactForm({ phone: "", email: "", message: "" });
+  };
 
   // Smooth scroll helper
   const scrollToSection = (navLink: string) => {
@@ -743,7 +771,7 @@ export default function App() {
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <button
-              onClick={() => alert("Contact form would open here. In production, this would link to a researcher contact page.")}
+              onClick={() => setContactModalOpen(true)}
               className="px-7 py-3 text-sm font-semibold tracking-wide border border-border text-foreground hover:border-primary hover:text-primary transition-colors duration-200 active:scale-95"
             >
               Contact a Researcher
@@ -793,7 +821,7 @@ export default function App() {
                 ))}
                 <li>
                   <button
-                    onClick={() => alert("Contact form would open here.\n\nIn production, this would show contact information for the research team.")}
+                    onClick={() => setContactModalOpen(true)}
                     className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200"
                   >
                     Contact
@@ -812,6 +840,82 @@ export default function App() {
         </div>
       </footer>
 
+
+      {/* ── Contact Researcher Modal ──────────────────────────────────────── */}
+      <Modal isOpen={contactModalOpen} onClose={() => setContactModalOpen(false)}>
+        <div>
+          <div className="mb-6">
+            <h2 className="text-4xl font-light text-foreground mb-2" style={serif}>
+              Contact a Researcher
+            </h2>
+            <p className="text-xs tracking-widest uppercase text-primary" style={mono}>
+              Message will be prepared for {RESEARCHER_EMAIL}
+            </p>
+          </div>
+
+          <form className="space-y-5" onSubmit={handleContactSubmit}>
+            <div>
+              <label htmlFor="contact-phone" className="block text-sm text-foreground mb-2" style={mono}>
+                Phone number
+              </label>
+              <input
+                id="contact-phone"
+                type="tel"
+                value={contactForm.phone}
+                onChange={(event) => setContactForm((form) => ({ ...form, phone: event.target.value }))}
+                placeholder="+48 000 000 000"
+                className="w-full border border-border bg-background px-4 py-3 text-foreground placeholder:text-muted-foreground outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/30"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="contact-email" className="block text-sm text-foreground mb-2" style={mono}>
+                Email
+              </label>
+              <input
+                id="contact-email"
+                type="email"
+                required
+                value={contactForm.email}
+                onChange={(event) => setContactForm((form) => ({ ...form, email: event.target.value }))}
+                placeholder="your.email@example.com"
+                className="w-full border border-border bg-background px-4 py-3 text-foreground placeholder:text-muted-foreground outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/30"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="contact-message" className="block text-sm text-foreground mb-2" style={mono}>
+                Additional information
+              </label>
+              <textarea
+                id="contact-message"
+                rows={5}
+                value={contactForm.message}
+                onChange={(event) => setContactForm((form) => ({ ...form, message: event.target.value }))}
+                placeholder="Tell us what you would like to discuss or contribute..."
+                className="w-full resize-y border border-border bg-background px-4 py-3 text-foreground placeholder:text-muted-foreground outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/30"
+              />
+            </div>
+
+            <div className="flex flex-wrap gap-3 pt-2">
+              <button
+                type="submit"
+                className="px-7 py-3 text-sm font-semibold tracking-wide transition-all duration-200 hover:opacity-90 active:scale-95"
+                style={{ backgroundColor: "#c9872a", color: "#130d07" }}
+              >
+                Send Request
+              </button>
+              <button
+                type="button"
+                onClick={() => setContactModalOpen(false)}
+                className="px-7 py-3 text-sm font-semibold tracking-wide border border-border text-foreground hover:border-primary hover:text-primary transition-colors duration-200 active:scale-95"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </Modal>
 
       {/* ── Archive Item Modal ───────────────────────────────────────────── */}
       <Modal isOpen={archiveItemModal !== null} onClose={() => setArchiveItemModal(null)}>
