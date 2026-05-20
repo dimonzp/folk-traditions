@@ -3,7 +3,7 @@ import {
   Search, Menu, X, ChevronRight, MapPin,
   Music, Scissors, Utensils,
   Flame, Shirt, Wind, Mic, ArrowRight,
-  Archive, FileText, LayoutGrid,
+  Archive, FileText, LayoutGrid, Building2
 } from "lucide-react";
 
 // ── SVG folk-pattern (Ukrainian embroidery diamond repeat) ───────────────────
@@ -23,6 +23,13 @@ const CATEGORY_TABS = [
   { id: "crafts",         label: "Crafts",        icon: Scissors },
   { id: "stories",        label: "Stories",       icon: FileText },
   { id: "oral-histories", label: "Oral Histories",icon: Mic },
+  { id: "poltava",        label: "Poltava",       icon: Building2 },
+  { id: "kyiv",           label: "Kyiv",          icon: Building2 },
+  { id: "zaporizhzhia",   label: "Zaporizhzhia",  icon: Building2 },
+  { id: "dnipro",         label: "Dnipro",        icon: Building2 },
+  { id: "volyn",          label: "Volyn",         icon: Building2 },
+  { id: "lviv",           label: "Lviv",          icon: Building2 },
+  { id: "frankivsk",      label: "Ivano-Frankivsk",icon: Building2 },
 ] as const;
 
 const CATEGORY_INFO: Record<string, { description: string; significance: string; examples: string[] }> = {
@@ -70,7 +77,7 @@ const CATEGORY_INFO: Record<string, { description: string; significance: string;
 
 interface Item {
   id: number;
-  category: string;
+  categories: string[];
   title: string;
   region: string;
   year: string;
@@ -80,10 +87,13 @@ interface Item {
   featured?: boolean;
 }
 
+const getCategoryLabel = (categoryId: string) =>
+  CATEGORY_TABS.find((category) => category.id === categoryId)?.label ?? categoryId;
+
 const ITEMS: Item[] = [
   {
     id: 1,
-    category: "clothing",
+    categories: ["clothing", "poltava"],
     title: "Poltava Vyshyvanka — Ceremonial Blouse",
     region: "Poltava Oblast",
     year: "c. 1887",
@@ -96,7 +106,7 @@ const ITEMS: Item[] = [
   },
   {
     id: 2,
-    category: "songs",
+    categories: ["songs", "kyiv"],
     title: "Vesnianky — Spring Ritual Songs",
     region: "Kyiv Oblast",
     year: "Collected 1923",
@@ -109,7 +119,7 @@ const ITEMS: Item[] = [
   },
   {
     id: 3,
-    category: "dances",
+    categories: ["dances", "zaporizhzhia"],
     title: "Hopak — Cossack Dance Notation",
     region: "Zaporizhzhia",
     year: "c. 1905",
@@ -121,7 +131,7 @@ const ITEMS: Item[] = [
   },
   {
     id: 4,
-    category: "crafts",
+    categories: ["crafts", "dnipro"],
     title: "Petrykivka Decorative Painting",
     region: "Dnipropetrovsk Oblast",
     year: "c. 1930",
@@ -134,7 +144,7 @@ const ITEMS: Item[] = [
   },
   {
     id: 5,
-    category: "rituals",
+    categories: ["rituals", "volyn"],
     title: "Kupala Night — Midsummer Ceremony",
     region: "Volyn Oblast",
     year: "Documented 1912",
@@ -146,7 +156,7 @@ const ITEMS: Item[] = [
   },
   {
     id: 6,
-    category: "oral-histories",
+    categories: ["oral-histories", "lviv"],
     title: "Halychyna Weaving Songs — Oral Testimony",
     region: "Lviv Oblast",
     year: "Recorded 1978",
@@ -158,7 +168,7 @@ const ITEMS: Item[] = [
   },
   {
     id: 7,
-    category: "recipes",
+    categories: ["recipes"],
     title: "Borscht Variations — Regional Manuscript",
     region: "Multiple Regions",
     year: "Compiled 1955",
@@ -170,7 +180,7 @@ const ITEMS: Item[] = [
   },
   {
     id: 8,
-    category: "stories",
+    categories: ["stories", "frankivsk"],
     title: "Carpathian Folktales — Hutsul Tradition",
     region: "Ivano-Frankivsk Oblast",
     year: "Transcribed 1899",
@@ -185,6 +195,7 @@ const ITEMS: Item[] = [
 const REGIONS = [
   {
     name: "Poltava",
+    category: "poltava",
     items: 847,
     specialty: "Embroidery & Ritual Song",
     image:
@@ -195,6 +206,7 @@ const REGIONS = [
   },
   {
     name: "Kyiv Oblast",
+    category: "kyiv",
     items: 1203,
     specialty: "Ritual & Oral History",
     image:
@@ -205,6 +217,7 @@ const REGIONS = [
   },
   {
     name: "Lviv Oblast",
+    category: "lviv",
     items: 923,
     specialty: "Crafts & Textile",
     image:
@@ -215,6 +228,7 @@ const REGIONS = [
   },
   {
     name: "Zaporizhzhia",
+    category: "zaporizhzhia",
     items: 612,
     specialty: "Cossack Dance",
     image:
@@ -225,6 +239,7 @@ const REGIONS = [
   },
   {
     name: "Volyn",
+    category: "volyn",
     items: 445,
     specialty: "Ritual & Weaving",
     image:
@@ -235,6 +250,7 @@ const REGIONS = [
   },
   {
     name: "Dnipropetrovsk",
+    category: "dnipro",
     items: 538,
     specialty: "Decorative Painting",
     image:
@@ -243,13 +259,6 @@ const REGIONS = [
     heritage: "The village of Petrykivka developed a unique decorative painting style characterized by swirling floral compositions, vibrant colors, and symbolic imagery. This tradition, recognized by UNESCO in 2013, adorned homes, ceramics, and ritual objects.",
     notable: ["Petrykivka painting (UNESCO heritage)", "Decorative ceramic traditions", "Floral motif development", "Traditional pigment preparation"]
   },
-];
-
-const STATS = [
-  { value: "4,568", label: "Archived Items" },
-  { value: "24",    label: "Regions Covered" },
-  { value: "312",   label: "Contributors" },
-  { value: "1891",  label: "Earliest Record" },
 ];
 
 // ── Shared style helpers ──────────────────────────────────────────────────────
@@ -304,11 +313,19 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-function ArchiveCard({ item }: { item: Item }) {
+function ArchiveCard({ item, onSelect }: { item: Item; onSelect: (item: Item) => void }) {
   return (
     <article
-      onClick={() => alert(`Viewing details for: ${item.title}\n\nIn production, this would open a detailed view with full metadata, images, and related items.`)}
-      className="group border border-border hover:border-primary/50 transition-all duration-300 cursor-pointer bg-card"
+      role="button"
+      tabIndex={0}
+      onClick={() => onSelect(item)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onSelect(item);
+        }
+      }}
+      className="group border border-border hover:border-primary/50 transition-all duration-300 cursor-pointer bg-card focus:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/40"
     >
       <div className="relative overflow-hidden aspect-[3/2] bg-muted">
         <img
@@ -362,14 +379,14 @@ function ArchiveCard({ item }: { item: Item }) {
 export default function App() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [menuOpen,       setMenuOpen]       = useState(false);
-  const [searchOpen,     setSearchOpen]     = useState(false);
   const [categoryModal,  setCategoryModal]  = useState<string | null>(null);
   const [regionModal,    setRegionModal]    = useState<string | null>(null);
+  const [archiveItemModal, setArchiveItemModal] = useState<Item | null>(null);
 
   const filtered =
     activeCategory === "all"
       ? ITEMS
-      : ITEMS.filter((i) => i.category === activeCategory);
+      : ITEMS.filter((i) => i.categories.includes(activeCategory));
 
   // Smooth scroll helper
   const scrollToSection = (navLink: string) => {
@@ -419,13 +436,6 @@ export default function App() {
                 {link}
               </button>
             ))}
-            <button
-              onClick={() => setSearchOpen((v) => !v)}
-              className="text-muted-foreground hover:text-primary transition-colors duration-200 ml-2"
-              aria-label="Toggle search"
-            >
-              <Search size={17} />
-            </button>
           </div>
 
           {/* Mobile toggle */}
@@ -437,24 +447,6 @@ export default function App() {
             {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
-
-        {/* Search bar */}
-        {searchOpen && (
-          <div
-            className="border-t border-border px-6 py-3"
-            style={{ backgroundColor: "rgba(19,13,7,0.99)" }}
-          >
-            <div className="max-w-2xl mx-auto flex items-center gap-3">
-              <Search size={15} className="text-muted-foreground flex-shrink-0" />
-              <input
-                autoFocus
-                placeholder="Search songs, rituals, regions, crafts…"
-                className="w-full bg-transparent text-foreground placeholder:text-muted-foreground text-sm outline-none py-1"
-                style={sans}
-              />
-            </div>
-          </div>
-        )}
 
         {/* Mobile menu */}
         {menuOpen && (
@@ -541,31 +533,6 @@ export default function App() {
               </button>
             </div>
           </div>
-
-          {/* Hero stat card */}
-          <div className="hidden lg:flex justify-end">
-            <div
-              className="w-72 border border-border p-6"
-              style={{ backgroundColor: "rgba(29,18,9,0.88)", backdropFilter: "blur(10px)" }}
-            >
-              <p className="text-[10px] tracking-widest uppercase text-muted-foreground mb-5" style={mono}>
-                Archive at a glance
-              </p>
-              <div className="space-y-4">
-                {STATS.map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="flex justify-between items-baseline border-b border-border pb-3 last:border-0 last:pb-0"
-                  >
-                    <span className="text-sm text-muted-foreground">{stat.label}</span>
-                    <span className="text-3xl font-light text-primary" style={serif}>
-                      {stat.value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -585,12 +552,6 @@ export default function App() {
                 Folk Traditions by Category
               </h2>
             </div>
-            <button
-              onClick={() => alert("Full catalogue view would open here.\n\nIn production, this would show a paginated list of all archive items with advanced filtering.")}
-              className="hidden md:flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
-              View full catalogue <ChevronRight size={14} />
-            </button>
           </div>
 
           {/* Tabs */}
@@ -626,7 +587,7 @@ export default function App() {
           {filtered.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map((item) => (
-                <ArchiveCard key={item.id} item={item} />
+                <ArchiveCard key={item.id} item={item} onSelect={setArchiveItemModal} />
               ))}
             </div>
           ) : (
@@ -689,27 +650,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* ── Stats strip ─────────────────────────────────────────────────── */}
-      <section
-        className="border-y border-border py-14"
-        style={{ backgroundImage: folkBg, backgroundRepeat: "repeat", backgroundColor: "var(--secondary)" }}
-      >
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-border">
-            {STATS.map((stat) => (
-              <div key={stat.label} className="text-center px-6 py-2">
-                <div className="text-5xl font-light text-primary mb-2" style={serif}>
-                  {stat.value}
-                </div>
-                <div className="text-[11px] tracking-widest uppercase text-muted-foreground" style={mono}>
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── About / Mission ─────────────────────────────────────────────── */}
       <section id="about" className="py-24 scroll-mt-20">
         <div className="max-w-7xl mx-auto px-6">
@@ -749,14 +689,6 @@ export default function App() {
               </div>
 
               <div className="border-t border-border pt-6">
-                <p className="text-xs text-muted-foreground mb-3" style={mono}>Partner institutions</p>
-                <div className="flex flex-wrap gap-3">
-                  {["NAS of Ukraine", "Kyiv-Mohyla Academy", "Ukrainian Institute", "Europeana", "DARIAH"].map((p) => (
-                    <span key={p} className="text-xs border border-border px-3 py-1 text-muted-foreground" style={mono}>
-                      {p}
-                    </span>
-                  ))}
-                </div>
               </div>
             </div>
 
@@ -810,13 +742,6 @@ export default function App() {
             attributed and shared under open licences.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <button
-              onClick={() => alert("Submission form would open here. In production, this would link to a contribution portal.")}
-              className="flex items-center gap-2 px-7 py-3 text-sm font-semibold tracking-wide transition-all duration-200 hover:opacity-90 active:scale-95"
-              style={{ backgroundColor: "#c9872a", color: "#130d07" }}
-            >
-              Submit a Record <ArrowRight size={15} />
-            </button>
             <button
               onClick={() => alert("Contact form would open here. In production, this would link to a researcher contact page.")}
               className="px-7 py-3 text-sm font-semibold tracking-wide border border-border text-foreground hover:border-primary hover:text-primary transition-colors duration-200 active:scale-95"
@@ -876,48 +801,111 @@ export default function App() {
                 </li>
               </ul>
             </div>
-
-            {/* Partners */}
-            <div>
-              <p className="text-[11px] text-foreground tracking-widest uppercase mb-4" style={mono}>
-                Partners
-              </p>
-              <ul className="space-y-2.5">
-                {[
-                  "NAS of Ukraine",
-                  "Kyiv-Mohyla Academy",
-                  "Ukrainian Institute",
-                  "Europeana Foundation",
-                  "DARIAH-EU",
-                ].map((partner) => (
-                  <li key={partner}>
-                    <span className="text-sm text-muted-foreground">{partner}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
           </div>
 
           {/* Bottom bar */}
           <div className="border-t border-border pt-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <p className="text-[11px] text-muted-foreground" style={mono}>
-              © 2024 Digital Preservation of Folk Traditions Project — CC BY-NC 4.0
+              © 2026 Digital Preservation of Folk Traditions
             </p>
-            <div className="flex gap-6 flex-wrap">
-              {["Privacy Policy", "Terms of Use", "API Access", "Data Download"].map((link) => (
+          </div>
+        </div>
+      </footer>
+
+
+      {/* ── Archive Item Modal ───────────────────────────────────────────── */}
+      <Modal isOpen={archiveItemModal !== null} onClose={() => setArchiveItemModal(null)}>
+        {archiveItemModal && (
+          <div>
+            <div className="mb-6">
+              <div className="mb-4 overflow-hidden border border-border bg-muted" style={{ aspectRatio: "16/9" }}>
+                <img
+                  src={archiveItemModal.image}
+                  alt={archiveItemModal.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h2 className="text-4xl font-light text-foreground mb-2" style={serif}>
+                {archiveItemModal.title}
+              </h2>
+              <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground" style={mono}>
+                <div className="flex flex-wrap gap-2">
+                  {archiveItemModal.categories.map((categoryId) => (
+                    <span key={categoryId} className="tracking-widest uppercase text-primary">
+                      {getCategoryLabel(categoryId)}
+                    </span>
+                  ))}
+                </div>
+                <span className="w-px h-3 bg-border" />
+                <span>{archiveItemModal.region}</span>
+                <span className="w-px h-3 bg-border" />
+                <span>{archiveItemModal.year}</span>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-2 tracking-wide uppercase" style={mono}>
+                  Overview
+                </h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  {archiveItemModal.description}
+                </p>
+              </div>
+
+              {archiveItemModal.categories.some((categoryId) => CATEGORY_INFO[categoryId]) && (
+                <div>
+                  <h3 className="text-sm font-semibold text-foreground mb-2 tracking-wide uppercase" style={mono}>
+                    Category Context
+                  </h3>
+                  <div className="space-y-4">
+                    {archiveItemModal.categories
+                      .filter((categoryId) => CATEGORY_INFO[categoryId])
+                      .map((categoryId) => (
+                        <div key={categoryId}>
+                          <p className="text-xs tracking-widest uppercase text-primary mb-1" style={mono}>
+                            {getCategoryLabel(categoryId)}
+                          </p>
+                          <p className="text-muted-foreground leading-relaxed">
+                            {CATEGORY_INFO[categoryId].significance}
+                          </p>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-2 tracking-wide uppercase" style={mono}>
+                  Tags
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {archiveItemModal.tags.map((tag) => (
+                    <TagChip key={tag} tag={tag} />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-border flex flex-wrap gap-3">
+              {archiveItemModal.categories.map((categoryId) => (
                 <button
-                  key={link}
-                  onClick={() => alert(`${link} page would open here.\n\nIn production, this would link to the ${link.toLowerCase()} documentation.`)}
-                  className="text-[11px] text-muted-foreground hover:text-primary transition-colors duration-200"
-                  style={mono}
+                  key={categoryId}
+                  onClick={() => {
+                    setArchiveItemModal(null);
+                    setActiveCategory(categoryId);
+                    scrollToSection("archive");
+                  }}
+                  className="flex items-center gap-2 px-6 py-3 text-sm font-semibold tracking-wide transition-all duration-200 hover:opacity-90"
+                  style={{ backgroundColor: "#c9872a", color: "#130d07" }}
                 >
-                  {link}
+                  View more in {getCategoryLabel(categoryId)} <ArrowRight size={15} />
                 </button>
               ))}
             </div>
           </div>
-        </div>
-      </footer>
+        )}
+      </Modal>
 
       {/* ── Category Modal ──────────────────────────────────────────────── */}
       <Modal isOpen={categoryModal !== null} onClose={() => setCategoryModal(null)}>
@@ -1056,6 +1044,7 @@ export default function App() {
                       onClick={() => {
                         setRegionModal(null);
                         scrollToSection("archive");
+                        setActiveCategory(region.category);
                       }}
                       className="flex items-center gap-2 px-6 py-3 text-sm font-semibold tracking-wide transition-all duration-200 hover:opacity-90"
                       style={{ backgroundColor: "#c9872a", color: "#130d07" }}
