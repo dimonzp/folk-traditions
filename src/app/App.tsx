@@ -4,7 +4,7 @@ import {
   ArrowRight,
   Archive
 } from "lucide-react";
-import { CATEGORY_INFO, CATEGORY_TABS, ITEMS, REGIONS } from "./data";
+import { CATEGORY_TABS, ITEMS, REGIONS } from "./data";
 import { Item } from "./interfaces";
 
 // ── SVG folk-pattern (Ukrainian embroidery diamond repeat) ───────────────────
@@ -54,17 +54,6 @@ function Modal({ isOpen, onClose, children }: { isOpen: boolean; onClose: () => 
   );
 }
 
-function TagChip({ tag }: { tag: string }) {
-  return (
-    <span
-      className="text-xs px-2 py-0.5 border border-border text-muted-foreground"
-      style={mono}
-    >
-      #{tag}
-    </span>
-  );
-}
-
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <p className="text-xs tracking-widest uppercase text-primary mb-2" style={mono}>
@@ -93,14 +82,6 @@ function ArchiveCard({ item, onSelect }: { item: Item; onSelect: (item: Item) =>
           alt={item.title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        {item.featured && (
-          <span
-            className="absolute top-3 left-3 text-xs px-2 py-0.5"
-            style={{ backgroundColor: "#c9872a", color: "#130d07", ...mono }}
-          >
-            Featured
-          </span>
-        )}
         <span
           className="absolute top-3 right-3 text-xs px-2 py-0.5 bg-background/80 text-muted-foreground"
           style={mono}
@@ -124,11 +105,6 @@ function ArchiveCard({ item, onSelect }: { item: Item; onSelect: (item: Item) =>
         <p className="text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-2">
           {item.description}
         </p>
-        <div className="flex flex-wrap gap-1.5">
-          {item.tags.map((tag) => (
-            <TagChip key={tag} tag={tag} />
-          ))}
-        </div>
       </div>
     </article>
   );
@@ -139,7 +115,6 @@ function ArchiveCard({ item, onSelect }: { item: Item; onSelect: (item: Item) =>
 export default function App() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [menuOpen,       setMenuOpen]       = useState(false);
-  const [categoryModal,  setCategoryModal]  = useState<string | null>(null);
   const [regionModal,    setRegionModal]    = useState<string | null>(null);
   const [archiveItemModal, setArchiveItemModal] = useState<Item | null>(null);
   const [contactModalOpen, setContactModalOpen] = useState(false);
@@ -357,15 +332,6 @@ export default function App() {
                   <Icon size={12} />
                   {label}
                 </button>
-                {id !== "all" && (
-                  <button
-                    onClick={() => setCategoryModal(id)}
-                    className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary text-background flex items-center justify-center text-[10px] opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                    title={`Learn about ${label}`}
-                  >
-                    i
-                  </button>
-                )}
               </div>
             ))}
           </div>
@@ -715,39 +681,6 @@ export default function App() {
                   {archiveItemModal.description}
                 </p>
               </div>
-
-              {archiveItemModal.categories.some((categoryId) => CATEGORY_INFO[categoryId]) && (
-                <div>
-                  <h3 className="text-sm font-semibold text-foreground mb-2 tracking-wide uppercase" style={mono}>
-                    Category Context
-                  </h3>
-                  <div className="space-y-4">
-                    {archiveItemModal.categories
-                      .filter((categoryId) => CATEGORY_INFO[categoryId])
-                      .map((categoryId) => (
-                        <div key={categoryId}>
-                          <p className="text-xs tracking-widest uppercase text-primary mb-1" style={mono}>
-                            {getCategoryLabel(categoryId)}
-                          </p>
-                          <p className="text-muted-foreground leading-relaxed">
-                            {CATEGORY_INFO[categoryId].significance}
-                          </p>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-              )}
-
-              <div>
-                <h3 className="text-sm font-semibold text-foreground mb-2 tracking-wide uppercase" style={mono}>
-                  Tags
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {archiveItemModal.tags.map((tag) => (
-                    <TagChip key={tag} tag={tag} />
-                  ))}
-                </div>
-              </div>
             </div>
 
             <div className="mt-8 pt-6 border-t border-border flex flex-wrap gap-3">
@@ -765,78 +698,6 @@ export default function App() {
                   View more in {getCategoryLabel(categoryId)} <ArrowRight size={15} />
                 </button>
               ))}
-            </div>
-          </div>
-        )}
-      </Modal>
-
-      {/* ── Category Modal ──────────────────────────────────────────────── */}
-      <Modal isOpen={categoryModal !== null} onClose={() => setCategoryModal(null)}>
-        {categoryModal && CATEGORY_INFO[categoryModal] && (
-          <div>
-            <div className="mb-6">
-              {CATEGORY_TABS.find(c => c.id === categoryModal) && (
-                <>
-                  {(() => {
-                    const Icon = CATEGORY_TABS.find(c => c.id === categoryModal)!.icon;
-                    return <Icon size={32} className="text-primary mb-4" />;
-                  })()}
-                </>
-              )}
-              <h2 className="text-4xl font-light text-foreground mb-2" style={serif}>
-                {CATEGORY_TABS.find(c => c.id === categoryModal)?.label}
-              </h2>
-              <p className="text-xs tracking-widest uppercase text-primary" style={mono}>
-                Folk Tradition Category
-              </p>
-            </div>
-
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-sm font-semibold text-foreground mb-2 tracking-wide uppercase" style={mono}>
-                  Description
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {CATEGORY_INFO[categoryModal].description}
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-sm font-semibold text-foreground mb-2 tracking-wide uppercase" style={mono}>
-                  Cultural Significance
-                </h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {CATEGORY_INFO[categoryModal].significance}
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-sm font-semibold text-foreground mb-2 tracking-wide uppercase" style={mono}>
-                  Examples in Archive
-                </h3>
-                <ul className="space-y-2">
-                  {CATEGORY_INFO[categoryModal].examples.map((example, i) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 mt-2" />
-                      <span className="text-sm text-muted-foreground">{example}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            <div className="mt-8 pt-6 border-t border-border">
-              <button
-                onClick={() => {
-                  setCategoryModal(null);
-                  setActiveCategory(categoryModal);
-                  scrollToSection("archive");
-                }}
-                className="flex items-center gap-2 px-6 py-3 text-sm font-semibold tracking-wide transition-all duration-200 hover:opacity-90"
-                style={{ backgroundColor: "#c9872a", color: "#130d07" }}
-              >
-                View {CATEGORY_TABS.find(c => c.id === categoryModal)?.label} in Archive <ArrowRight size={15} />
-              </button>
             </div>
           </div>
         )}

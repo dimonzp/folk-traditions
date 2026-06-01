@@ -7,6 +7,4 @@ export interface Item {
   year: string;
   description: string;
   image: string;
-  tags: string[];
-  featured?: boolean;
 }
