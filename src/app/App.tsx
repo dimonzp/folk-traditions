@@ -180,7 +180,7 @@ export default function App() {
           {/* Logo */}
           <div className="flex flex-col leading-tight">
             <span className="text-primary text-xl font-semibold" style={{ ...serif, letterSpacing: "0.02em" }}>
-              Спадщина
+              FOLK TRADITIONS
             </span>
             <span className="text-muted-foreground text-[10px] tracking-widest uppercase" style={mono}>
               Folk Archive
@@ -420,20 +420,6 @@ export default function App() {
                 licences for educational and research use.
               </p>
 
-              <div className="space-y-3 mb-8">
-                {[
-                  "Open-access research archive, free to all",
-                  "CC BY-NC 4.0 licensed educational materials",
-                  "Multilingual record metadata (UK, EN, DE, PL)",
-                  "Ongoing field documentation and digitisation programme",
-                ].map((point) => (
-                  <div key={point} className="flex items-start gap-3">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 mt-2" />
-                    <span className="text-sm text-muted-foreground leading-relaxed">{point}</span>
-                  </div>
-                ))}
-              </div>
-
               <div className="border-t border-border pt-6">
               </div>
             </div>
@@ -509,7 +495,7 @@ export default function App() {
                   className="text-primary text-2xl font-semibold block"
                   style={{ ...serif, letterSpacing: "0.02em" }}
                 >
-                  Спадщина
+                  FOLK TRADITIONS
                 </span>
                 <span className="text-muted-foreground text-[10px] tracking-widest uppercase" style={mono}>
                   Digital Folk Archive

@@ -143,7 +143,7 @@ export const ITEMS: Item[] = [
         year: "XIX century",
         description:
             "St. Andrew’s Eve (Kalyta): A winter youth gathering where a large, sweet round bread (kalyta) is hung from the ceiling. The dry, honey-baked dough ring symbolizes the winter sun, which young men must protect from being smeared with soot by a comical guardian. Young men try to bite it without using their hands while riding a broomstick, surrounded by ritual jokes.",
-        image: "/images/empty.jpg",
+        image: "/images/StAndrewEve.jpg",
     },
     {
         id: 14,
@@ -153,7 +153,7 @@ export const ITEMS: Item[] = [
         year: "over 1000 years ago",
         description:
             "Gathering of Herbs on Symon Zylot (May 10): An ancient pre-Christian animistic ritual. Village communities believed that the earth was blessed with maximum bio-energy on this day, requiring absolute silence and specific white clothing during the harvest of medicinal roots.",
-        image: "/images/empty.jpg",
+        image: "/images/SymonZylot.jpg",
     },
     {
         id: 15,
@@ -163,7 +163,7 @@ export const ITEMS: Item[] = [
         year: "late XVIII century",
         description:
             "Weather Divination by Morning Dew: A local agricultural folk practice where elders read the density of morning dew and rainbows during key spring holidays to predict harvest volumes and rainfall.",
-        image: "/images/empty.jpg",
+        image: "/images/WeatherDivination.jpg",
     },
     {
         id: 16,
@@ -203,7 +203,7 @@ export const ITEMS: Item[] = [
         year: "XX century",
         description:
             "The 'Odesa Language' Anecdotes: A distinct urban oral folklore combining Ukrainian, Yiddish, Russian, and French grammatical structures into witty stories, proverbs, and street humor.",
-        image: "/images/empty.jpg",
+        image: "/images/TheOdesaLanguageAnecdotes.jpg",
     },
     {
         id: 20,
@@ -223,7 +223,7 @@ export const ITEMS: Item[] = [
         year: "XVIII century",
         description:
             "Grecian Wine-Pouring Hospitality: An open-table welcoming ritual tracing back to the late 18th century Greek settlements in places like Odesa and Bilhorod-Dnistrivskyi. Coastal villages settled by ethnic Greeks preserve folk tales and rituals where wine must be poured in a single continuous stream while wishing the guest safe sea travels. The pouring protocol required specific oral wishing for a calm sea (Halini).",
-        image: "/images/empty.jpg",
+        image: "/images/GrecianWinePouringHospitality.jpg",
     },
     {
         id: 22,
@@ -243,7 +243,7 @@ export const ITEMS: Item[] = [
         year: "XIX century",
         description:
             "Water-Blessing at the Sea: Epiphany (January) winter rituals where entire villages gather on the sandy beaches of the Black Sea to watch brave youth dive into icy seawater to retrieve a wooden cross. This specific open-water winter adaptation, which differs from traditional river ice-hole diving due to the shifting marine tides, was documented by local maritime parishes starting in the 1850s.",
-        image: "/images/empty.jpg",
+        image: "/images/WaterBlessingAtTheSea.jpg",
     },
     {
         id: 24,
@@ -323,7 +323,7 @@ export const ITEMS: Item[] = [
         year: "XVI-XVIII century",
         description:
             "The Cossack Code of Honor (Zvycheyeve Pravo): An unwritten system of customary law organized on the Khortytsia island between 1552 and 1775. It regulated all political, military, and diplomatic interactions within the Cossack republic via oral consensus.",
-        image: "/images/empty.jpg",
+        image: "/images/TheCossackCodeofHonor.jpg",
     },
     {
         id: 32,
@@ -353,12 +353,12 @@ export const ITEMS: Item[] = [
         year: "XVII century",
         description:
             "Initiation into the Host: A folklore ritual for young recruits (dzhury), who had to pass physical tests. Recruits had to navigate the dangerous, now-submerged Dnipro rapids using manual wooden oars to prove their absolute emotional composure under pressure to be accepted as true free men.",
-        image: "/images/empty.jpg",
+        image: "/images/InitiationIntoTheHost.jpg",
     },
     {
         id: 35,
         categories: ["zaporizhzhia"],
-        title: "The Osetledets Ritual",
+        title: "The Oseledets Ritual",
         region: "Zaporizhzhia",
         year: "X century (XVI century adaptation)",
         description:
@@ -373,7 +373,7 @@ export const ITEMS: Item[] = [
         year: "XVI-XVIII century",
         description:
             "Cossack Sorcery (Kharakternyky): Rich local legends about magical warriors who could allegedly catch bullets with their bare hands, read minds, turn into wolves, and lock rivers to hide from enemies.",
-        image: "/images/empty.jpg",
+        image: "/images/CossackSorcery.jpg",
     },
     {
         id: 37,
@@ -413,7 +413,7 @@ export const ITEMS: Item[] = [
         year: "XVIII century",
         description:
             "Cossack Wintering Songs (Zymivnyky): Folk songs originating from stationary Cossack agricultural farms (zymivnyky), focusing on the transition from warrior life to peaceful farming and cattle breeding. On November 28, 2016, this vocal tradition was inscribed onto the UNESCO Intangible Cultural Heritage List in Need of Urgent Safeguarding.",
-        image: "/images/empty.jpg",
+        image: "/images/CossackWinteringSongs.jpg",
     },
     {
         id: 41,
@@ -433,7 +433,7 @@ export const ITEMS: Item[] = [
         year: "Pre-Christian eras",
         description:
             "Harvesting the 'Spas' Apple: A folklore ritual on the Feast of the Transfiguration (Spas), where apples and honey are blessed. Eating the first bite of the blessed apple involves making a secret wish for family health. A pre-Christian solar harvest feast integrated into the Orthodox calendar. Local 19th-century estate records show that up until this mid-August day, eating apples was considered taboo to protect the seasonal maturation of orchards.",
-        image: "/images/empty.jpg",
+        image: "/images/HarvestingTheApple.jpg",
     },
     {
         id: 43,
@@ -493,7 +493,7 @@ export const ITEMS: Item[] = [
         year: "XV century",
         description:
             "Carrying the 'Svichka' (The Moving Candle): A unique communal tradition where a massive, decorated holy wax candle, weighing up to 30 kilograms, is melted down and recast annually by the community during a closed ritual meal.",
-        image: "/images/empty.jpg",
+        image: "/images/TheMovingCandle.jpg",
     },
     {
         id: 49,
@@ -583,7 +583,7 @@ export const ITEMS: Item[] = [
         year: "XIX century",
         description:
             "The Urban Coffee Lore: A specific 19th-century urban folklore surrounding Lviv coffeehouses, involving complex social etiquette, storytelling, and local legends about discovering coffee beans in city dungeons.",
-        image: "/images/empty.jpg",
+        image: "/images/TheUrbanCoffeeLore.jpg",
     },
     {
         id: 58,
