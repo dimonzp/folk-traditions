@@ -1,5 +1,5 @@
 import { Item } from "./interfaces";
-import { LayoutGrid, Building2 } from "lucide-react";
+import { LayoutGrid, Building2, CircleEllipsis } from "lucide-react";
 
 export const CATEGORY_TABS = [
     { id: "all", label: "All", icon: LayoutGrid },
@@ -11,6 +11,7 @@ export const CATEGORY_TABS = [
     { id: "lviv", label: "Lviv", icon: Building2 },
     { id: "frankivsk", label: "Ivano-Frankivsk", icon: Building2 },
     { id: "odesa", label: "Odesa", icon: Building2 },
+    { id: "other", label: "Other", icon: CircleEllipsis },
 ] as const;
 
 export const ITEMS: Item[] = [
@@ -76,7 +77,7 @@ export const ITEMS: Item[] = [
     },
     {
         id: 7,
-        categories: ["recipes"],
+        categories: ["other"],
         title: "Borscht Variations — Regional Manuscript",
         region: "Multiple Regions",
         year: "Compiled 1955",
