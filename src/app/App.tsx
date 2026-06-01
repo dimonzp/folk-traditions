@@ -255,13 +255,6 @@ export default function App() {
         <div className="relative max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-end w-full">
           {/* Copy */}
           <div>
-            <div className="flex items-center gap-3 mb-6">
-              <span className="inline-block w-8 h-px bg-primary" />
-              <span className="text-primary text-[11px] tracking-widest uppercase" style={mono}>
-                Digital Humanities Project — Est. 2018
-              </span>
-            </div>
-
             <h1
               className="text-5xl lg:text-[5.5rem] font-light leading-[1.08] mb-6 text-foreground"
               style={serif}
